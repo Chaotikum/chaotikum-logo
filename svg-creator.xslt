@@ -11,6 +11,7 @@
       standalone="no"
       doctype-public="-//W3C//DTD SVG 1.1//EN"
       doctype-system="http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"
+      cdata-section-elements="script"
       media-type="image/svg" />
 
   <xsl:template name="pins">
@@ -24,7 +25,7 @@
                           div ($total-pin-count - 1)" />
     <xsl:for-each select="str:tokenize($pin-ids, ' ')">
       <xsl:variable name="pin-number" select="." />
-      <xsl:variable name="rel-pin-number" select="$pin-number mod $total-pin-count" />
+      <xsl:variable name="rel-pin-number" select="position() - 1" />
       <xsl:variable name="position-shift"
                     select="$pin-height + $pin-padding + $rel-pin-number * $pin-dist" />
       <rect class="{concat('pin', $pin-number)}"
@@ -59,13 +60,13 @@
           <g class="vertical right"
              transform="translate({$chip-width + 2 * /chiprompt/@pin-height} 0) rotate(90)">
             <xsl:call-template name="pins">
-              <xsl:with-param name="pin-ids">00 01 02 03 04</xsl:with-param>
+              <xsl:with-param name="pin-ids">04 03 02 01 00</xsl:with-param>
             </xsl:call-template>
           </g>
           <!-- Pins top -->
           <g class="vertical top">
             <xsl:call-template name="pins">
-              <xsl:with-param name="pin-ids">05 06 07 08 09</xsl:with-param>
+              <xsl:with-param name="pin-ids">09 08 07 06 05</xsl:with-param>
             </xsl:call-template>
           </g>
           <!-- Pins left -->
