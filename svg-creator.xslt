@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" 
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns="http://www.w3.org/2000/svg">
+		xmlns="http://www.w3.org/2000/svg"
+                xmlns:str="http://exslt.org/strings"
+                extension-element-prefixes="str"
+                >
   <xsl:output
       method="xml"
       indent="yes"
@@ -10,23 +13,27 @@
       doctype-system="http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"
       media-type="image/svg" />
 
-  <xsl:template name="pin">
-    <xsl:param name="pin-number" />
-    <xsl:variable name="rel-pin-number" select="$pin-number mod 5" />
-    <xsl:variable name="pin-width" select="/chiprompt/@pin-width" />
+  <xsl:template name="pins">
+    <xsl:param name="pin-ids" />
+    <xsl:variable name="total-pin-count" select="count(str:tokenize($pin-ids, ' '))" />
+    <xsl:variable name="pin-width" select="//chiprompt/@pin-width" />
     <xsl:variable name="pin-height" select="/chiprompt/@pin-height" />
-    <xsl:variable name="total-pin-count" select="//pins/horizontal-pins/@count - 1" />
+    <xsl:variable name="pin-padding" select="/chiprompt/@pin-padding" />
     <xsl:variable name="pin-dist"
                   select="(/chiprompt/@width - 2 * /chiprompt/@pin-padding - $pin-width)
-                          div $total-pin-count" />
-    <xsl:variable name="position-shift"
-                  select="$pin-height + /chiprompt/@pin-padding + $rel-pin-number * $pin-dist" />
-    <rect class="{concat('pin', $pin-number)}"
-          x="{$position-shift}"
-          height="{$pin-height}"
-          width="{$pin-width}" />
+                          div ($total-pin-count - 1)" />
+    <xsl:for-each select="str:tokenize($pin-ids, ' ')">
+      <xsl:variable name="pin-number" select="." />
+      <xsl:variable name="rel-pin-number" select="$pin-number mod $total-pin-count" />
+      <xsl:variable name="position-shift"
+                    select="$pin-height + $pin-padding + $rel-pin-number * $pin-dist" />
+      <rect class="{concat('pin', $pin-number)}"
+            x="{$position-shift}"
+            height="{$pin-height}"
+            width="{$pin-width}" />
+    </xsl:for-each>
   </xsl:template>
- 
+
   <xsl:template match="/">
     <xsl:variable name="pin-padding" select="/chiprompt/@pin-padding"/>
     <xsl:variable name="chip-width" select="/chiprompt/@width"/>
@@ -51,76 +58,28 @@
           <!-- Pins right -->
           <g class="vertical right"
              transform="translate({$chip-width + 2 * /chiprompt/@pin-height} 0) rotate(90)">
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">00</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">01</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">02</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">03</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">04</xsl:with-param>
+            <xsl:call-template name="pins">
+              <xsl:with-param name="pin-ids">00 01 02 03 04</xsl:with-param>
             </xsl:call-template>
           </g>
           <!-- Pins top -->
           <g class="vertical top">
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">05</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">06</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">07</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">08</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">09</xsl:with-param>
+            <xsl:call-template name="pins">
+              <xsl:with-param name="pin-ids">05 06 07 08 09</xsl:with-param>
             </xsl:call-template>
           </g>
           <!-- Pins left -->
           <g class="vertical left"
              transform="translate({/chiprompt/@pin-height} 0) rotate(90)">
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">10</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">11</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">12</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">13</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">14</xsl:with-param>
+            <xsl:call-template name="pins">
+              <xsl:with-param name="pin-ids">10 11 12 13 14</xsl:with-param>
             </xsl:call-template>
           </g>
           <!-- Pins bottom -->
           <g class="vertical bottom"
              transform="translate(0 {$chip-width + /chiprompt/@pin-height})">
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">15</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">16</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">17</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">18</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="pin">
-              <xsl:with-param name="pin-number">19</xsl:with-param>
+            <xsl:call-template name="pins">
+              <xsl:with-param name="pin-ids">15 16 17 18 19</xsl:with-param>
             </xsl:call-template>
           </g>
         </g>
