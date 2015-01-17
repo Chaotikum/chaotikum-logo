@@ -1,0 +1,9 @@
+<chiprompt width="73.1"
+           pin-padding="8.3"
+           pin-width="6.7"
+           pin-height="13">
+  <pins>
+    <horizontal-pins count="5" />
+    <vertical-pins count="5" />
+  </pins>
+</chiprompt>
