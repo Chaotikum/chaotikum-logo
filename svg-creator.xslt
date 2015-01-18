@@ -33,6 +33,27 @@
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template name="pin-ids">
+    <xsl:param name="pin-count" />
+    <xsl:param name="start-index" select="0" />
+    <xsl:param name="reverse" />
+    <xsl:if test="not($reverse) and ($pin-count &gt; 0)">
+      <xsl:call-template name="pin-ids">
+        <xsl:with-param name="pin-count" select="$pin-count - 1" />
+        <xsl:with-param name="start-index" select="$start-index" />
+        <xsl:with-param name="reverse" select="$reverse" />
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:value-of select="concat(substring(string(100 + ($pin-count + $start-index)), 2), ' ')" />
+    <xsl:if test="($reverse) and $pin-count &gt; 0">
+      <xsl:call-template name="pin-ids">
+        <xsl:with-param name="pin-count" select="$pin-count - 1" />
+        <xsl:with-param name="start-index" select="$start-index" />
+        <xsl:with-param name="reverse" select="$reverse" />
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template match="/">
     <xsl:variable name="pin-padding" select="/chiprompt/@pin-padding"/>
     <xsl:variable name="chip-width" select="/chiprompt/@width"/>
@@ -59,27 +80,51 @@
           <g class="vertical right"
              transform="translate({$chip-width + 2 * /chiprompt/@pin-height} 0) rotate(90)">
             <xsl:call-template name="pins">
-              <xsl:with-param name="pin-ids">04 03 02 01 00</xsl:with-param>
+              <xsl:with-param name="pin-ids">
+                <xsl:call-template name="pin-ids">
+                  <xsl:with-param name="pin-count" select="/chiprompt/pins/vertical-pins/@count - 1" />
+                  <xsl:with-param name="reverse">true</xsl:with-param>
+                </xsl:call-template>
+              </xsl:with-param>
             </xsl:call-template>
           </g>
           <!-- Pins top -->
           <g class="vertical top">
             <xsl:call-template name="pins">
-              <xsl:with-param name="pin-ids">09 08 07 06 05</xsl:with-param>
+              <xsl:with-param name="pin-ids">
+                <xsl:call-template name="pin-ids">
+                  <xsl:with-param name="pin-count" select="/chiprompt/pins/horizontal-pins/@count - 1" />
+                  <xsl:with-param name="start-index"
+                                  select="//vertical-pins/@count" />
+                  <xsl:with-param name="reverse">true</xsl:with-param>
+                </xsl:call-template>
+              </xsl:with-param>
             </xsl:call-template>
           </g>
           <!-- Pins left -->
           <g class="vertical left"
              transform="translate({/chiprompt/@pin-height} 0) rotate(90)">
             <xsl:call-template name="pins">
-              <xsl:with-param name="pin-ids">10 11 12 13 14</xsl:with-param>
+              <xsl:with-param name="pin-ids">
+                <xsl:call-template name="pin-ids">
+                  <xsl:with-param name="pin-count" select="/chiprompt/pins/vertical-pins/@count - 1" />
+                  <xsl:with-param name="start-index"
+                                  select="//horizontal-pins/@count + //vertical-pins/@count" />
+                </xsl:call-template>
+              </xsl:with-param>
             </xsl:call-template>
           </g>
           <!-- Pins bottom -->
           <g class="vertical bottom"
              transform="translate(0 {$chip-width + /chiprompt/@pin-height})">
             <xsl:call-template name="pins">
-              <xsl:with-param name="pin-ids">15 16 17 18 19</xsl:with-param>
+              <xsl:with-param name="pin-ids">
+                <xsl:call-template name="pin-ids">
+                  <xsl:with-param name="pin-count" select="/chiprompt/pins/horizontal-pins/@count - 1" />
+                  <xsl:with-param name="start-index"
+                                  select="//horizontal-pins/@count + 2 * //vertical-pins/@count" />
+                </xsl:call-template>
+              </xsl:with-param>
             </xsl:call-template>
           </g>
         </g>
