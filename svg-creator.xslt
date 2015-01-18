@@ -9,8 +9,6 @@
       method="xml"
       indent="yes"
       standalone="no"
-      doctype-public="-//W3C//DTD SVG 1.1//EN"
-      doctype-system="http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"
       cdata-section-elements="script"
       media-type="image/svg" />
 
@@ -44,6 +42,7 @@
          xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
          xsl:version="1.0"
          version="1.1"
+         baseProfile="full"
          viewBox="0 0 {$total-view-width} {$total-view-width}">
 
       <style>
