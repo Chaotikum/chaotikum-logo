@@ -11,6 +11,6 @@ converting XML using XML.  Yeah, right.
 Create a svg from the XML definition by running (e.g.)
 
 ```
-xsltproc --output chip-prompt-orig.xml svg-creator.xslt chip-prompt-orig.svg
+xsltproc --output chip-prompt-orig.xml svg-creator.xslt chip-prompt-orig.xml
 ```
 
