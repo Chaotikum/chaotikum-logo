@@ -57,18 +57,27 @@
   <xsl:template match="/">
     <xsl:variable name="pin-padding" select="/chiprompt/@pin-padding"/>
     <xsl:variable name="chip-width" select="/chiprompt/@width"/>
-    <xsl:variable name="total-view-width" select="/chiprompt/@width + 2 * /chiprompt/@pin-height" />
+    <xsl:variable name="total-logo-width" select="/chiprompt/@width + 2 * /chiprompt/@pin-height" />
+    <xsl:variable name="total-view-width" select="600" />
+    <xsl:variable name="total-view-height" select="300" />
+    <xsl:variable name="view-shift-x" select="-($total-view-width - $total-logo-width) div 2" />
+    <xsl:variable name="view-shift-y" select="-($total-view-height - $total-logo-width) div 2" />
 
     <svg xmlns="http://www.w3.org/2000/svg"
          xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
          xsl:version="1.0"
          version="1.1"
          baseProfile="full"
-         viewBox="0 0 {$total-view-width} {$total-view-width}">
+         viewBox="{$view-shift-x} {$view-shift-y} {$total-view-width} {$total-view-height}">
 
       <style>
         .chip {stroke: none;}
         .pin {fill: #666;}
+        .active { stroke: #e67206 }
+        circle {fill: #666; }
+        circle.active {fill:#e67206}
+        .pin .active { fill: #e67206; stroke:none }
+        .tracers { fill: none; stroke: #666 }
         .chip .chip-body { fill: #1a1a1a }
         .chip .underscore { fill:#b3b3b3; }
         .chip .letter { fill:#ffffff; }
@@ -186,6 +195,122 @@
                    -0.702816,1.98569 -0.702816,3.0789 l 0,10.57542" />
         </g>
       </g>
+
+      <g transform="translate({$view-shift-x}  {$view-shift-y})">
+        <xsl:variable name="pin-dist"
+                      select="(/chiprompt/@width - 2 * //@pin-padding - //@pin-width) div (5 - 1)" />
+
+        <xsl:variable name="x-line-0" select="$total-view-width div 8" />
+        <xsl:variable name="x-line-1" select="($total-view-width div 8) * 3" />
+        <xsl:variable name="x-line-2" select="($total-view-width div 8) * 5" />
+        <xsl:variable name="x-line-3" select="($total-view-width div 8) * 7" />
+        <xsl:variable name="x-line-15" select="($total-view-width div 8) * 4" />
+
+        <xsl:variable name="y-line-0" select="1 * (-$view-shift-y div 4)" />
+        <xsl:variable name="y-line-1" select="2 * (-$view-shift-y div 4)" />
+        <xsl:variable name="y-line-2" select="3 * (-$view-shift-y div 4)" />
+        <xsl:variable name="y-line-3" select="$total-view-height + $view-shift-y + $y-line-0" />
+        <xsl:variable name="y-line-4" select="$total-view-height + $view-shift-y + $y-line-1" />
+        <xsl:variable name="y-line-5" select="$total-view-height + $view-shift-y + $y-line-2" />
+
+        <xsl:variable name="x-pin-left" select="-$view-shift-x" />
+        <xsl:variable name="x-pin-right" select="$total-logo-width - $view-shift-x" />
+        <xsl:variable name="y-pin-top" select="-$view-shift-y" />
+        <xsl:variable name="y-pin-bottom" select="$total-logo-width - $view-shift-y" />
+
+        <xsl:variable name="x-pin-v0" select="-$view-shift-x + $pin-padding + //@pin-height + (//@pin-width div 2) + 4 * $pin-dist" />
+        <xsl:variable name="x-pin-v1" select="-$view-shift-x + $pin-padding + //@pin-height + (//@pin-width div 2) + 3 * $pin-dist" />
+        <xsl:variable name="x-pin-v2" select="-$view-shift-x + $pin-padding + //@pin-height + (//@pin-width div 2) + 2 * $pin-dist" />
+        <xsl:variable name="x-pin-v3" select="-$view-shift-x + $pin-padding + //@pin-height + (//@pin-width div 2) + 1 * $pin-dist" />
+        <xsl:variable name="x-pin-v4" select="-$view-shift-x + $pin-padding + //@pin-height + (//@pin-width div 2) + 0 * $pin-dist" />
+
+        <xsl:variable name="y-pin-v0" select="-$view-shift-y + $pin-padding + //@pin-height + (//@pin-width div 2) + 4 * $pin-dist" />
+        <xsl:variable name="y-pin-v1" select="-$view-shift-y + $pin-padding + //@pin-height + (//@pin-width div 2) + 3 * $pin-dist" />
+        <xsl:variable name="y-pin-v2" select="-$view-shift-y + $pin-padding + //@pin-height + (//@pin-width div 2) + 2 * $pin-dist" />
+        <xsl:variable name="y-pin-v3" select="-$view-shift-y + $pin-padding + //@pin-height + (//@pin-width div 2) + 1 * $pin-dist" />
+        <xsl:variable name="y-pin-v4" select="-$view-shift-y + $pin-padding + //@pin-height + (//@pin-width div 2) + 0 * $pin-dist" />
+
+        <xsl:variable name="x-line-dist" select="$total-view-width div 4" />
+        <xsl:variable name="y-line-dist" select="$y-line-0" />
+        <xsl:variable name="x-pin-to-line" select="$x-line-0 - ($total-logo-width div 2)" />
+        <xsl:variable name="y-pin-to-line" select="-$view-shift-y - $y-line-2" />
+
+        <path d="m 0,0 h {$total-view-width} v {$total-view-height} h -{$total-view-width} v -{$total-view-height}"
+              fill="none"
+              opacity="1"
+              stroke="black" />
+        <circle class="pin12" cx="{$x-line-0}" cy="0" r="3" />
+        <circle class="pin08" cx="{$x-line-1}" cy="0" r="3" />
+        <circle class="pin06" cx="{$x-line-2}" cy="0" r="3" />
+        <circle class="pin05" cx="{$x-line-3}" cy="0" r="3" />
+
+        <circle class="pin10 pin13" cx="{$x-line-0}" cy="{$total-view-height}" r="3" />
+        <circle class="pin11" cx="{$x-line-1}" cy="{$total-view-height}" r="3" />
+        <circle class="pin00 pin18" cx="{$x-line-2}" cy="{$total-view-height}" r="3" />
+        <circle class="pin03 pin17" cx="{$x-line-3}" cy="{$total-view-height}" r="3" />
+        <g class="tracers">
+          <path class="pin00 pin18"
+                d="m {$x-pin-right},{$y-pin-v0} h {$x-pin-to-line} v {$total-view-height - $y-pin-v0}"
+                />
+          <path class="pin03 pin17 cat3"
+                d="m {$x-pin-right},{$y-pin-v3} h {$x-pin-to-line + $x-line-dist} v {$total-view-height - $y-pin-v3}"
+                />
+
+          <path class="pin05"
+                d="m {$x-pin-v0},{$y-pin-top} v {-$y-pin-to-line} h {$x-line-3 - $x-pin-v0} v {-$y-line-2}"
+                />
+          <path class="pin06"
+                d="m {$x-pin-v1},{$y-pin-top} v {-$y-pin-to-line - $y-line-dist} h {$x-line-2 - $x-pin-v1} v {-$y-line-1}"
+                />
+          <path class="pin08"
+                d="m {$x-pin-v3},{$y-pin-top} v {-$y-pin-to-line - $y-line-dist} h {$x-line-1 - $x-pin-v3} v {-$y-line-1}"
+                />
+
+          <path class="pin10 pin13"
+                d="m {$x-pin-left},{$y-pin-v4} h -{$x-line-dist + $x-pin-to-line} v {$total-view-height - $y-pin-v4}"
+                />
+          <path class="pin11 cat0"
+                d="m {$x-pin-left},{$y-pin-v3} h -{$x-pin-to-line} v {$total-view-height - $y-pin-v3}" />
+          <path class="pin12 menu0"
+                d="m {$x-pin-left},{$y-pin-v2} h {-$x-pin-to-line - ($x-line-dist div 2)} v {- $y-pin-v2 + $y-line-2}
+                   h {-$x-line-dist div 2} v {-$y-line-2}" />
+          <path class="pin13 pin10 cat1"
+                d="m {$x-pin-left},{$y-pin-v1} h -{$x-line-dist + $x-pin-to-line}" />
+          <path class="pin10 pin13 cat0"
+                d="m {$x-line-0},{$y-pin-v1} v {$total-view-height - $y-pin-v1}" />
+
+          <path class="pin17 pin03 cat3"
+                d="m {$x-pin-v2},{$y-pin-bottom} v {$y-pin-to-line + $y-line-dist} h {$x-line-3 - $x-pin-v2}"
+                />
+          <path class="pin18 pin00 cat2"
+                d="m {$x-pin-v1},{$y-pin-bottom} v {$y-pin-to-line} h {$x-line-2 - $x-pin-v1}"
+                />
+          <path class="pin00 pin18 cat2"
+                d="m {$x-line-2},{$y-line-3} v {$total-view-height - $y-line-3}"
+                />
+        </g>
+      </g>
+      <script type="text/javascript">
+        <![CDATA[
+        function update() {
+          var currentTime = new Date();
+          var secs = currentTime.getSeconds();
+          var activatedPins = getPins(secs % 20);
+          var deactivatedPins = getPins((secs + 19) % 20);
+          for (i = 0; i < deactivatedPins.length; i++) {
+            deactivatedPins[i].classList.remove('active');
+          }
+          for (var i = 0; i < activatedPins.length; i++) {
+            activatedPins[i].classList.add('active');
+          }
+        }
+        function getPins(x) {
+          var activeNum = x < 10 ? ('0'+x) : x;
+          return document.querySelectorAll('.pin'+ activeNum);
+        }
+        setInterval(update, 100);
+        ]]>
+      </script>
     </svg>
   </xsl:template>
 </xsl:stylesheet>
