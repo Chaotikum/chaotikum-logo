@@ -2,8 +2,6 @@
 <xsl:stylesheet version="1.0" 
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		xmlns="http://www.w3.org/2000/svg"
-                xmlns:str="http://exslt.org/strings"
-                extension-element-prefixes="str"
                 >
   <xsl:output
       method="xml"
@@ -14,98 +12,56 @@
 
   <xsl:template name="pins">
     <xsl:param name="pin-ids" />
-    <xsl:variable name="total-pin-count" select="count(str:tokenize($pin-ids, ' '))" />
+    <xsl:param name="chip-width" />
+    <xsl:variable name="total-pin-count" select="count($pin-ids/pin)" />
     <xsl:variable name="pin-width" select="//pins/@pin-width" />
     <xsl:variable name="pin-height" select="//pins/@pin-height" />
     <xsl:variable name="pin-padding" select="//pins/@pin-padding" />
     <xsl:variable name="pin-dist"
-                  select="(//chip/@width - 2 * //pins/@pin-padding - $pin-width)
+                  select="($chip-width - 2 * $pin-padding - $pin-width)
                           div ($total-pin-count - 1)" />
-    <xsl:for-each select="str:tokenize($pin-ids, ' ')">
-      <xsl:variable name="pin-number" select="." />
+    <xsl:for-each select="$pin-ids/pin">
+      <xsl:variable name="pin-number" select="@id" />
       <xsl:variable name="rel-pin-number" select="position() - 1" />
-      <xsl:variable name="position-shift"
-                    select="$pin-height + $pin-padding + $rel-pin-number * $pin-dist" />
-      <rect class="{concat('pin', $pin-number)}"
-            x="{$position-shift}"
+      <rect class="{@class}"
+            x="{$pin-height + $pin-padding + ($rel-pin-number * $pin-dist)}"
             height="{$pin-height}"
             width="{$pin-width}" />
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template name="pin-ids">
-    <xsl:param name="pin-count" />
-    <xsl:param name="start-index" select="0" />
-    <xsl:param name="reverse" />
-    <xsl:if test="not($reverse) and ($pin-count &gt; 0)">
-      <xsl:call-template name="pin-ids">
-        <xsl:with-param name="pin-count" select="$pin-count - 1" />
-        <xsl:with-param name="start-index" select="$start-index" />
-        <xsl:with-param name="reverse" select="$reverse" />
-      </xsl:call-template>
-    </xsl:if>
-    <xsl:value-of select="concat(substring(string(100 + ($pin-count + $start-index)), 2), ' ')" />
-    <xsl:if test="($reverse) and $pin-count &gt; 0">
-      <xsl:call-template name="pin-ids">
-        <xsl:with-param name="pin-count" select="$pin-count - 1" />
-        <xsl:with-param name="start-index" select="$start-index" />
-        <xsl:with-param name="reverse" select="$reverse" />
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template match="pins">
     <xsl:param name="chip-width" />
-    <g class="pin">
+    <g class="pins pin">
       <!-- Pins right -->
-      <g class="vertical right"
-         transform="translate({$chip-width + 2 * //@pin-height} 0) rotate(90)">
+      <g class="right"
+         transform="translate({$chip-width + 2 * @pin-height} 0) rotate(90)">
         <xsl:call-template name="pins">
-          <xsl:with-param name="pin-ids">
-            <xsl:call-template name="pin-ids">
-              <xsl:with-param name="pin-count" select="//vertical-pins/@count - 1" />
-              <xsl:with-param name="reverse">true</xsl:with-param>
-            </xsl:call-template>
-          </xsl:with-param>
+          <xsl:with-param name="pin-ids" select="pins-right" />
+          <xsl:with-param name="chip-width" select="$chip-width" />
         </xsl:call-template>
       </g>
       <!-- Pins top -->
-      <g class="vertical top">
+      <g class="top">
         <xsl:call-template name="pins">
-          <xsl:with-param name="pin-ids">
-            <xsl:call-template name="pin-ids">
-              <xsl:with-param name="pin-count" select="//horizontal-pins/@count - 1" />
-              <xsl:with-param name="start-index"
-                              select="//vertical-pins/@count" />
-              <xsl:with-param name="reverse">true</xsl:with-param>
-            </xsl:call-template>
-          </xsl:with-param>
+          <xsl:with-param name="pin-ids" select="pins-top" />
+          <xsl:with-param name="chip-width" select="$chip-width" />
         </xsl:call-template>
       </g>
       <!-- Pins left -->
-      <g class="vertical left"
+      <g class="left"
          transform="translate({@pin-height} 0) rotate(90)">
         <xsl:call-template name="pins">
-          <xsl:with-param name="pin-ids">
-            <xsl:call-template name="pin-ids">
-              <xsl:with-param name="pin-count" select="//vertical-pins/@count - 1" />
-              <xsl:with-param name="start-index"
-                              select="/horizontal-pins/@count + /vertical-pins/@count" />
-            </xsl:call-template>
-          </xsl:with-param>
+          <xsl:with-param name="pin-ids" select="pins-left" />
+          <xsl:with-param name="chip-width" select="$chip-width" />
         </xsl:call-template>
       </g>
       <!-- Pins bottom -->
-      <g class="vertical bottom"
-         transform="translate(0 {$chip-width + //@pin-height})">
+      <g class="bottom"
+         transform="translate(0 {$chip-width + @pin-height})">
         <xsl:call-template name="pins">
-          <xsl:with-param name="pin-ids">
-            <xsl:call-template name="pin-ids">
-              <xsl:with-param name="pin-count" select="//horizontal-pins/@count - 1" />
-              <xsl:with-param name="start-index"
-                              select="//horizontal-pins/@count + 2 * //vertical-pins/@count" />
-            </xsl:call-template>
-          </xsl:with-param>
+          <xsl:with-param name="pin-ids" select="pins-bottom" />
+          <xsl:with-param name="chip-width" select="$chip-width" />
         </xsl:call-template>
       </g>
     </g>
@@ -115,6 +71,9 @@
     <xsl:variable name="pin-padding" select="//pins/@pin-padding"/>
     <xsl:variable name="longest-edge-length" select="@width - 2 * $pin-padding"/>
     <g class="chip">
+      <xsl:apply-templates select="pins">
+        <xsl:with-param name="chip-width" select="@width" />
+      </xsl:apply-templates>
       <!-- Chip -->
       <path class="chip-body"
             d="m {//pins/@pin-height + $pin-padding},{//pins/@pin-height}
@@ -128,9 +87,6 @@
                h {-$longest-edge-length}
                z"
             />
-      <xsl:apply-templates select="pins">
-        <xsl:with-param name="chip-width" select="@width" />
-      </xsl:apply-templates>
     </g>
   </xsl:template>
 

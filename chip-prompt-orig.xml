@@ -3,8 +3,34 @@
     <pins pin-padding="8.3"
           pin-width="6.7"
           pin-height="13">
-      <horizontal-pins count="5" />
-      <vertical-pins count="5" />
+      <pins-right>
+        <pin id="pin00" class="pin00" />
+        <pin id="pin01" class="pin01" />
+        <pin id="pin02" class="pin02" />
+        <pin id="pin03" class="pin03" />
+        <pin id="pin04" class="pin04" />
+      </pins-right>
+      <pins-left>
+        <pin id="pin10" class="pin10" />
+        <pin id="pin11" class="pin11" />
+        <pin id="pin12" class="pin12" />
+        <pin id="pin13" class="pin13" />
+        <pin id="pin14" class="pin14" />
+      </pins-left>
+      <pins-top>
+        <pin id="pin05" class="pin05" />
+        <pin id="pin06" class="pin06" />
+        <pin id="pin07" class="pin07" />
+        <pin id="pin08" class="pin08" />
+        <pin id="pin08" class="pin09" />
+      </pins-top>
+      <pins-bottom>
+        <pin id="pin15" class="pin15" />
+        <pin id="pin16" class="pin16" />
+        <pin id="pin17" class="pin17" />
+        <pin id="pin18" class="pin18" />
+        <pin id="pin19" class="pin19" />
+      </pins-bottom>
     </pins>
   </chip>
 </chiprompt>
