@@ -25,7 +25,7 @@
           <pin id="pin06" class="pin06" />
           <pin id="pin07" class="pin07" />
           <pin id="pin08" class="pin08" />
-          <pin id="pin08" class="pin09" />
+          <pin id="pin09" class="pin09" />
         </pins-top>
         <pins-bottom>
           <pin id="pin15" class="pin15" />
