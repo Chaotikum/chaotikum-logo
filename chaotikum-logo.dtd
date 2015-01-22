@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!ELEMENT chaotikum-logo (chiprompt)>
+<!ELEMENT chiprompt      (chip)>
+<!ELEMENT chip           (pins)>
+<!ELEMENT pins           (pins-right,pins-left,pins-top,pins-bottom)>
+<!ELEMENT pins-top       (pin*)>
+<!ELEMENT pins-left      (pin*)>
+<!ELEMENT pins-bottom    (pin*)>
+<!ELEMENT pins-right     (pin*)>
+<!ELEMENT pin            EMPTY>
+
+<!ATTLIST chip width  CDATA "73.6">
+<!ATTLIST pins
+          pin-height  CDATA "13.2"
+          pin-padding CDATA "8.3"
+          pin-width   CDATA "6.7">
+<!ATTLIST pin
+          id          ID #IMPLIED
+          class       CDATA #IMPLIED>
