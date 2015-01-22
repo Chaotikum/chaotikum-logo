@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE chaotikum-logo SYSTEM "../chaotikum-logo.dtd">
+<chaotikum-logo>
+  <chiprompt>
+    <chip>
+      <pins>
+        <pins-right>
+          <pin id="pin04" class="pin04" />
+          <pin id="pin03" class="pin03" />
+          <pin id="pin02" class="pin02" />
+          <pin id="pin01" class="pin01" />
+          <pin id="pin00" class="pin00" />
+        </pins-right>
+        <pins-left>
+          <pin id="pin10" class="pin10" />
+          <pin id="pin11" class="pin11" />
+          <pin id="pin12" class="pin12" />
+          <pin id="pin13" class="pin13" />
+          <pin id="pin14" class="pin14" />
+        </pins-left>
+        <pins-top>
+          <pin id="pin09" class="pin09" />
+          <pin id="pin08" class="pin08" />
+          <pin id="pin07" class="pin07" />
+          <pin id="pin06" class="pin06" />
+          <pin id="pin05" class="pin05" />
+        </pins-top>
+        <pins-bottom>
+          <pin id="pin15" class="pin15" />
+          <pin id="pin16" class="pin16" />
+          <pin id="pin17" class="pin17" />
+          <pin id="pin18" class="pin18" />
+          <pin id="pin19" class="pin19" />
+        </pins-bottom>
+      </pins>
+    </chip>
+  </chiprompt>
+  <style>
+    .pin .active { fill: #e67206 }
+  </style>
+  <script type="text/javascript">
+    <![CDATA[
+    function update() {
+      var currentTime = new Date();
+      var secs = currentTime.getSeconds();
+      getPin(secs % 20).classList.add('active');
+      //document.querySelector('.chip .letter').classList.add('active');
+      getPin((secs + 19) % 20).classList.remove('active');
+    }
+    function getPin(x) {
+      var activeNum = x<10 ? ('0'+x) : x;
+      return document.querySelector('.pin'+ activeNum);
+    }
+    setInterval(update, 100);
+    ]]>
+  </script>
+</chaotikum-logo>
