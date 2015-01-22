@@ -140,6 +140,18 @@
     </g>
   </xsl:template>
 
+  <xsl:template match="script">
+    <script type="text/javascript">
+      <xsl:apply-templates />
+    </script>
+  </xsl:template>
+
+  <xsl:template match="style">
+    <style type="text/css">
+      <xsl:apply-templates />
+    </style>
+  </xsl:template>
+
   <xsl:template match="/">
     <xsl:variable name="total-view-width" select="//chip/@width + 2 * //pins/@pin-height" />
 
