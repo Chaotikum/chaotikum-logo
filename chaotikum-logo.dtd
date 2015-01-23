@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!ENTITY % SVG.1.1
-         PUBLIC "-//W3C//DTD SVG 1.1//EN"
-         "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-%SVG.1.1;
+<!ENTITY % svg-1.1 SYSTEM "svg11.dtd">
+%svg-1.1;
 
 <!ELEMENT chaotikum-logo (defs*,chiprompt,defs*)>
 <!ELEMENT chiprompt      (chip)>
