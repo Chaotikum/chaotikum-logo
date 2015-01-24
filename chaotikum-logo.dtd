@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!ELEMENT chaotikum-logo (chiprompt,style?,script?)>
+<!ENTITY % svg-1.1 SYSTEM "svg11.dtd">
+%svg-1.1;
+
+<!ELEMENT chaotikum-logo (defs*,chiprompt,defs*)>
 <!ELEMENT chiprompt      (chip)>
 <!ELEMENT chip           (pins)>
 <!ELEMENT pins           (pins-right,pins-left,pins-top,pins-bottom)>
@@ -8,8 +11,6 @@
 <!ELEMENT pins-bottom    (pin*)>
 <!ELEMENT pins-right     (pin*)>
 <!ELEMENT pin            EMPTY>
-<!ELEMENT script         (#PCDATA)>
-<!ELEMENT style          (#PCDATA)>
 
 <!ATTLIST chip width  CDATA "73.6">
 <!ATTLIST pins
@@ -19,5 +20,3 @@
 <!ATTLIST pin
           id          ID #IMPLIED
           class       CDATA #IMPLIED>
-<!ATTLIST style type  CDATA "text/css">
-<!ATTLIST script type CDATA "text/javascript">
