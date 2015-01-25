@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE chaotikum-logo SYSTEM "../chaotikum-logo.dtd">
+<chaotikum-logo xmlns:svg="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow" height="150%" width="150%" filterUnits="userSpaceOnUse">
+      <feGaussianBlur result="coloredBlur" stdDeviation="0.7" />
+      <feOffset dx="0" dy="0" result="coloredBlur" />
+      <feMerge> 
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" /> 
+      </feMerge>
+    </filter>
+    <style type="text/css">
+      .chip { stroke: none }
+      .pin { fill: #666 }
+      .chip-body { fill: #1a1a1a }
+      .prompt .underscore { fill:#b3b3b3; filter: url(#glow) }
+      .prompt .prompt-start { fill:#b3b3b3 }
+      .prompt .letter { display: none; }
+      @-moz-keyframes blinking-cursor {
+        0%   { opacity: 1; }
+        35%  { opacity: 1; }
+        50%  { opacity: 0; }
+        85%  { opacity: 0; }
+        100% { opacity: 1; }
+      }
+      @-webkit-keyframes blinking-cursor {
+        0%   { opacity: 1; }
+        35%  { opacity: 1; }
+        50%  { opacity: 0; }
+        85%  { opacity: 0; }
+        100% { opacity: 1; }
+      }
+      .prompt .underscore {
+        -webkit-animation: blinking-cursor 2.3s ease infinite;
+        -moz-animation: blinking-cursor 2.3s ease infinite;
+        animation: blinking-cursor 2.3s ease infinite;
+      }
+    </style>
+  </defs>
+  <chiprompt>
+    <chip>
+      <pins>
+        <pins-right>
+          <pin /><pin /><pin /><pin /><pin />
+        </pins-right>
+        <pins-left>
+          <pin /><pin /><pin /><pin /><pin />
+        </pins-left>
+        <pins-top>
+          <pin /><pin /><pin /><pin /><pin />
+        </pins-top>
+        <pins-bottom>
+          <pin /><pin /><pin /><pin /><pin />
+        </pins-bottom>
+      </pins>
+    </chip>
+  </chiprompt>
+</chaotikum-logo>
