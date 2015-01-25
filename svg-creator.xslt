@@ -140,16 +140,20 @@
     </g>
   </xsl:template>
 
-  <xsl:template match="script">
-    <script type="text/javascript">
-      <xsl:apply-templates />
-    </script>
+  <xsl:template match="defs">
+    <defs>
+      <xsl:apply-templates mode="copy-svg" />
+    </defs>
   </xsl:template>
 
-  <xsl:template match="style">
-    <style type="text/css">
-      <xsl:apply-templates />
-    </style>
+  <xsl:template match="*" mode="copy-svg">
+    <xsl:element name="{name()}" namespace="http://www.w3.org/2000/svg">
+      <xsl:apply-templates select="@*|node()" mode="copy-svg" />
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="@*|text()|comment()" mode="copy-svg">
+    <xsl:copy/>
   </xsl:template>
 
   <xsl:template match="/">
@@ -157,6 +161,7 @@
 
     <svg xmlns="http://www.w3.org/2000/svg"
          xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
          xsl:version="1.0"
          version="1.1"
          baseProfile="full"
