@@ -1,6 +1,15 @@
 Logo of the Chaotikum e.V.
 ==========================
 
+```
+                                 _| | | | |_
+                                 _     _   _
+                                 _ \  / `  _
+                                 _ /  \_,  _
+                                 _    ===  _
+                                  | | | | |
+```
+
 Definition and styles for the Chaotikum logo.
 
 This project could also be described as: How do I overengineer something as
